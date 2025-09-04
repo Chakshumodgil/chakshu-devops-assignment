@@ -1,0 +1,10 @@
+# Ignore all Terraform-generated directories
+.terraform/
+
+# Ignore local override and variable files
+*.tfvars
+override.tf
+*_override.tf
+
+# Ignore crash logs
+crash.log

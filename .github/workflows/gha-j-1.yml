@@ -1,0 +1,19 @@
+# Basic workflow to check that CI runs when pushing to main
+name: Task_1 Main Branch CI Workflow
+
+# Run this workflow whenever there’s a push to the main branch.
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # The main job that runs the check.
+  main-branch-check:
+    # Use the latest GitHub-hosted Ubuntu runner
+    runs-on: ubuntu-latest
+    steps:
+      # Just print a message so we know the workflow actually ran
+      - name: Print main branch trigger message
+        run: echo "Workflow triggered for main branch"
+

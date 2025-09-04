@@ -1,0 +1,75 @@
+# Name of the workflow, this shows up in the GitHub Actions tab
+name: 'INT-J-1: Terraform and Helm CI Pipeline'
+
+on:
+  # You can run this workflow manually if needed
+  workflow_dispatch:
+
+  # Run automatically when pushing to the main branch,
+  # but only if changes are in the Terraform/Helm folders or this workflow file itself
+  push:
+    branches:
+      - main
+    paths:
+      - 'Junior/INT-J-1/solution_terraform/**'
+      - 'Junior/INT-J-1/solution_helm/**'
+      - '.github/workflows/int-j-1-pipeline.yml' # The workflow file itself
+
+  # Also run on Pull Requests targeting main branch, with the same path.
+  pull_request:
+    paths:
+      - 'Junior/INT-J-1/solution_terraform/**'
+      - 'Junior/INT-J-1/solution_helm/**'
+      - '.github/workflows/int-j-1-pipeline.yml' # The workflow file itself
+
+# This is the only job in the workflow
+jobs:
+  validate-and-test:
+    name: 'Validate Terraform and Test Helm'
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check the repository code.
+    - name: 'Checkout Code'
+      uses: actions/checkout@v3
+
+    # --- TERRAFORM STEPS ---
+      # install terraform 
+    - name: 'Set up Terraform'
+      uses: hashicorp/setup-terraform@v2
+
+      # Initialize Terraform 
+    - name: 'Terraform Init'
+      run: terraform init
+      working-directory: ./Junior/INT-J-1/solution_terraform
+
+    # To make sure Terraform code is valid
+    - name: 'Terraform Validate'
+      run: terraform validate
+      working-directory: ./Junior/INT-J-1/solution_terraform
+
+    # Try to run apply — this will fail since there is no GCP account,
+    # but that’s expected. I allow it to fail without stopping the workflow.
+    - name: 'Attempt Terraform Apply (Expected to Fail)'
+      continue-on-error: true
+      run: |
+        echo "Attempting to run terraform apply..."
+        echo "This step is expected to fail because no GCP credentials are configured for this assignment."
+        terraform apply -auto-approve
+      working-directory: ./Junior/INT-J-1/solution_terraform
+
+    # --- HELM STEPS ---
+    # Install Helm
+    - name: 'Set up Helm'
+      uses: azure/setup-helm@v3
+
+    # Lint the Helm chart to check for common mistakes.
+    - name: 'Lint Helm Chart'
+      run: helm lint .
+      working-directory: ./Junior/INT-J-1/solution_helm
+
+    # Render the Kubernetes manifests from the chart.
+    # Override a value to prove that configuration works in CI.
+    - name: 'Template Helm Chart and Verify Override'
+      run: helm template simple-config-app . --set greeting="Hello from a GitHub Actions CI pipeline!"
+      working-directory: ./Junior/INT-J-1/solution_helm

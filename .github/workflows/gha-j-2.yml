@@ -1,0 +1,22 @@
+# Workflow to build a Docker image whenever code is pushed to a feature branch
+name: Task_2 Docker Build Workflow
+
+# Run this workflow for pushes to any branch starting with 'feature/'
+on:                    
+  push:
+    branches:
+      - 'feature/*'
+
+jobs: 
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check the repository code.
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Build Docker image from the prerequisites Dockerfile
+      # The '-t' flag tags the image with a clean name: 'demo-image'.
+      - name: Build Docker image from provided Dockerfile
+        run: docker build -t demo-image ./Junior/GHA-J-2/prerequisites/
