@@ -73,3 +73,4 @@ jobs:
     - name: 'Template Helm Chart and Verify Override'
       run: helm template simple-config-app . --set greeting="Hello from a GitHub Actions CI pipeline!"
       working-directory: ./Junior/INT-J-1/solution_helm
+      
