@@ -2,11 +2,6 @@
 
 This repository contains solutions to Junior DevOps coding tasks by Chakshu Modgil.
 ---
-### Note: 
-
-- The workflows ran a few extra times while I was checking and testing my work.  
-- Please review the final runs under each workflow in GitHub Actions.  
-- The folders contain the final solutions.
 
 ### A note on Git workflow
 
