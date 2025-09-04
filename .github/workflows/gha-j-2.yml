@@ -20,3 +20,4 @@ jobs:
       # The '-t' flag tags the image with a clean name: 'demo-image'.
       - name: Build Docker image from provided Dockerfile
         run: docker build -t demo-image ./Junior/GHA-J-2/prerequisites/
+        
